@@ -238,3 +238,4 @@ __pycache__/
 # Editor and system files
 .vscode/
 .DS_Store
+!.env.example
