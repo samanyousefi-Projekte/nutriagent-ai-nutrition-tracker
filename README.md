@@ -13,6 +13,17 @@ Personal Python/Streamlit prototype for tracking meals and water consumption. Go
 - Store meal summaries, water totals and estimated protein in local SQLite; view basic history charts.
 - Optional separate command-line proof of concept (`main.py`) with a fictional example profile.
 
+## Application Screenshots
+
+### Login & Registration
+![Login screen](screenshots/Screenshot%202026-10-25%20195045.png)
+
+### User Dashboard & Hydration Tracking
+![User dashboard](screenshots/Screenshot%202026-10-25%20195117.png)
+
+### Meal Logging – Text & Image Input
+![Meal logging](screenshots/Screenshot%202026-10-25%20195130.png)
+
 ## Tech stack
 
 Python, Streamlit, Google GenAI SDK (Gemini API), SQLite, Pandas, Pillow; Matplotlib and NumPy support the optional CLI plotting script.
