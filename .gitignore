@@ -218,3 +218,23 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+# Virtual environments
+venv/
+.venv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Local database
+*.db
+*.sqlite3
+
+# API keys and secrets
+.env
+.env.*
+.streamlit/secrets.toml
+
+# Editor and system files
+.vscode/
+.DS_Store
