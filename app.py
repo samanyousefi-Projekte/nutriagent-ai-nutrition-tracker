@@ -14,9 +14,8 @@ from google import genai
 from google.genai import types
 from tools import get_food_nutrition
 
-# ---------------------------------------------------------
 # 0. DATENBANK INITIALISIEREN (Mit User-System)
-# ---------------------------------------------------------
+
 def init_db():
     conn = sqlite3.connect("nutriagent.db")
     c = conn.cursor()
@@ -75,11 +74,11 @@ GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.8-flash")
 
 # Seitenkonfiguration und Titel
 st.set_page_config(page_title="NutriAgent", layout="wide")
-st.title("🍏 NutriAgent 📏")
+st.title("NutriAgent")
 
-# ---------------------------------------------------------
+
 # 1. LOGIN & REGISTRIERUNG
-# ---------------------------------------------------------
+
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
 if "username" not in st.session_state:
@@ -130,21 +129,21 @@ if not st.session_state.logged_in:
     # App stoppt hier, wenn nicht eingeloggt
     st.stop()
 
-# ---------------------------------------------------------
+
 # WENN EINGELOGGT: HAUPTAPPLIKATION
-# ---------------------------------------------------------
-st.markdown(f"#### Willkommen zurück, **{st.session_state.username}**! 👋")
-if st.button("Logout 🚪"):
+
+st.markdown(f"#### Willkommen zurück, **{st.session_state.username}**! ")
+if st.button("Logout"):
     st.session_state.logged_in = False
     st.session_state.username = ""
     st.session_state.mahlzeiten = []
     st.session_state.wasser_ml = 0
     st.rerun()
 
-# ---------------------------------------------------------
+
 # 2. SEITENLEISTE (SIDEBAR) FÜR BENUTZERPROFIL
-# ---------------------------------------------------------
-st.sidebar.header("👤 Dein Profil")
+
+st.sidebar.header(" Dein Profil")
 age = st.sidebar.number_input("Alter", min_value=10, max_value=100, value=25)
 weight = st.sidebar.number_input("Gewicht (kg)", min_value=30.0, max_value=200.0, value=72.0)
 height = st.sidebar.number_input("Größe (cm)", min_value=100, max_value=250, value=171)
@@ -181,14 +180,14 @@ DYNAMIC_TARGETS = {
 
 st.sidebar.success(f"🎯 Tagesziel:\n{DYNAMIC_TARGETS['calories']} kcal | {DYNAMIC_TARGETS['protein']}g Protein\n💧 {target_water/1000:.1f} Liter Wasser")
 
-# ---------------------------------------------------------
+
 # TABS FÜR ANSICHTEN ERSTELLEN
-# ---------------------------------------------------------
+
 tab1, tab2 = st.tabs(["📅 Heutiger Tag", "📈 Historie & Fortschritt"])
 
-# ==========================================
+
 # TAB 1: HEUTIGER TAG
-# ==========================================
+
 with tab1:
     if "mahlzeiten" not in st.session_state:
         st.session_state.mahlzeiten = []
@@ -199,26 +198,26 @@ with tab1:
     with col1:
         today_date = st.date_input("📅 Datum", datetime.date.today())
     with col2:
-        workout_time = st.text_input("🏋️ Heutiges Training (Dauer/Art)", placeholder="z.B. 60 Min Krafttraining oder 'Kein Training'")
+        workout_time = st.text_input(" Heutiges Training (Dauer/Art)", placeholder="z.B. 60 Min Krafttraining oder 'Kein Training'")
 
     st.divider()
 
     st.write("### 💧 Wasser-Tracker")
     w_col1, w_col2, w_col3, w_col4 = st.columns(4)
     with w_col1:
-        if st.button("+ 250 ml 🥛"): st.session_state.wasser_ml += 250
+        if st.button("+ 250 ml "): st.session_state.wasser_ml += 250
     with w_col2:
-        if st.button("+ 500 ml 🍾"): st.session_state.wasser_ml += 500
+        if st.button("+ 500 ml "): st.session_state.wasser_ml += 500
     with w_col3:
-        if st.button("+ 1000 ml 🫙"): st.session_state.wasser_ml += 1000
+        if st.button("+ 1000 ml "): st.session_state.wasser_ml += 1000
     with w_col4:
-        if st.button("Reset 🔄"): st.session_state.wasser_ml = 0
+        if st.button("Reset "): st.session_state.wasser_ml = 0
 
     st.progress(min(st.session_state.wasser_ml / target_water, 1.0))
     st.write(f"**Getrunken:** {st.session_state.wasser_ml} ml / {target_water} ml")
     st.divider()
 
-    st.write("### 🍽️ Mahlzeiten eintragen")
+    st.write("###  Mahlzeiten eintragen")
     neue_mahlzeit = st.text_input("Text eingeben", placeholder="z.B. 2 Eier und 100g Reis")
     if st.button("Text-Mahlzeit speichern 💾"):
         if neue_mahlzeit.strip():
@@ -228,7 +227,7 @@ with tab1:
     st.write("**Oder Foto hochladen:**")
     uploaded_file = st.file_uploader("Bild auswählen", type=["jpg", "jpeg", "png"])
     if uploaded_file is not None and st.button("Bild analysieren 📸"):
-        with st.spinner("🤖 KI analysiert dein Bild..."):
+        with st.spinner(" KI analysiert dein Bild..."):
             try:
                 img = Image.open(uploaded_file)
                 client = get_gemini_client()
@@ -237,7 +236,7 @@ with tab1:
                     contents=[img, "Kurze Antwort auf Deutsch: Was für ein Essen/Supplement ist das und wie viel? (z.B. 1 Banane)"]
                 )
                 st.session_state.mahlzeiten.append(response_vision.text.strip())
-                st.success(f"✅ Erkannt: {response_vision.text.strip()}")
+                st.success(f" Erkannt: {response_vision.text.strip()}")
             except Exception:
                 st.error("Die KI-Anfrage ist fehlgeschlagen. Prüfe den API-Schlüssel, das Modell und die Verbindung.")
 
@@ -245,16 +244,16 @@ with tab1:
         st.write("---")
         for m in st.session_state.mahlzeiten:
             st.write(f"- {m}")
-        if st.button("Liste löschen 🗑️"):
+        if st.button("Liste löschen "):
             st.session_state.mahlzeiten = []
             st.rerun()
     st.divider()
 
-    if st.button("Tagesanalyse starten 🚀"):
+    if st.button("Tagesanalyse starten "):
         if not st.session_state.mahlzeiten and st.session_state.wasser_ml == 0:
             st.warning("⚠️ Bitte speichere zuerst Daten.")
         else:
-            with st.spinner("🤖 Bericht wird erstellt..."):
+            with st.spinner(" Bericht wird erstellt..."):
                 try:
                     client = get_gemini_client()
                     gesamte_ernaehrung = "\n".join(st.session_state.mahlzeiten) if st.session_state.mahlzeiten else "Keine"
@@ -295,11 +294,10 @@ with tab1:
                 except Exception:
                     st.error("Die KI-Anfrage ist fehlgeschlagen. Prüfe den API-Schlüssel, das Modell und die Verbindung.")
 
-# ==========================================
 # TAB 2: HISTORIE
-# ==========================================
+
 with tab2:
-    st.write("### 📈 Dein Fortschritt")
+    st.write("###  Dein Fortschritt")
     conn = sqlite3.connect("nutriagent.db")
     # Lade NUR die Daten des eingeloggten Users
     df_history = pd.read_sql_query(
